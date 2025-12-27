@@ -1,0 +1,26 @@
+#!/bin/bash
+
+for i in $( ls /home/ ); do
+
+    if [ -d /home/$i/htdocs/ ]; then
+
+        for d in $( ls /home/$i/htdocs/ ); do
+
+            if [ -d /home/$i/htdocs/$d/ ]; then
+
+                echo "backup: $d"
+
+                DST=/home/$i/backups/files/$d
+                mkdir -p $DST
+
+                tar -cvzf $DST/$( date '+%Y%m%d' ).$( date '+%H%M%S' ).tar.gz -C /home/$i/htdocs/ ./$d/
+
+                find $DST -type f -mtime +3 -exec rm {} \;
+
+            fi
+
+        done
+
+    fi
+
+done
